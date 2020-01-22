@@ -14,22 +14,26 @@ public class SceneController : MonoBehaviour
     private float _emitterEndPosition = 12f;
     private float _emitterDropPosition = 3f;
 
+    private float _basketStartPosition = 0f;
+
     // objects set in inspector
     public GameObject emitter;
     private Rigidbody _emitterRigidbody;
 
+    public GameObject basket;
+    private Rigidbody _basketRigidbody;
 
     public GameObject ball;
     private Rigidbody _ballRigidbody;
 
     public GameObject occluder;
-
+    public GameObject background;
 
     // experiment parameters
 
     private int subjectID;
     private int nrTrials = 3; // total number of trials
-    private float estimationMaxDuration = 6f;
+    private float estimationMaxDuration = 10f;
 
     // Lists to define heights, position, velocity
 
@@ -72,14 +76,20 @@ public class SceneController : MonoBehaviour
     public GameObject startInstruction;
     public GameObject restInstruction;
     public GameObject endInstruction;
+    public GameObject estimationInstruction;
+
 
     private void Start()
     {
+
         // get reference to scripts
         // dropController = GetComponent<DropController>();
 
         // get emitter rigidbody 
         _emitterRigidbody = emitter.GetComponent<Rigidbody>();
+
+        // get basket rigidbody 
+        _basketRigidbody = basket.GetComponent<Rigidbody>();
 
         // get ball rigidbody 
         _ballRigidbody = emitter.GetComponent<Rigidbody>();
@@ -89,6 +99,9 @@ public class SceneController : MonoBehaviour
 
         // initialise occluder to false
         occluder.SetActive(false);
+
+        // initialise obackground to false
+        background.SetActive(false);
 
         // initialise add velocity to true 
         GlobalParameters.AddVelocity = true; // ?
@@ -114,6 +127,9 @@ public class SceneController : MonoBehaviour
                     // show start instruction
                     startInstruction.SetActive(true);
 
+                    // hide estimation instruction
+                    estimationInstruction.SetActive(false);
+
                     // hide rest instruction
                     restInstruction.SetActive(false);
 
@@ -123,14 +139,22 @@ public class SceneController : MonoBehaviour
                     // hide occluder
                     occluder.SetActive(false);
 
+                    // hide background
+                    background.SetActive(false);
+
                     // set emitter velocity (angular velocities locked)
                     _emitterRigidbody.velocity = Vector3.zero; // shorthand for writing Vector3(0,0,0)
 
                     // set emitter position
                     emitter.transform.position = new Vector3(_emitterStartPosition, emitter.transform.position.y, emitter.transform.position.z);
 
-                    // if enter key is pressed transition to next state
-                    if (Input.GetKeyDown(KeyCode.Return))
+                    // set basket start position
+                    basket.transform.position = new Vector3(_basketStartPosition, basket.transform.position.y, basket.transform.position.z);
+
+
+
+            // if enter key is pressed transition to next state
+            if (Input.GetKeyDown(KeyCode.Return))
                     {
                         state = State.Task;
                     }
@@ -152,7 +176,10 @@ public class SceneController : MonoBehaviour
                 // hide start instruction
                 startInstruction.SetActive(false);
 
-                // hide end instruction
+                // hide estimation instruction
+                estimationInstruction.SetActive(false);
+
+                // hide rest instruction
                 restInstruction.SetActive(false);
 
 
@@ -195,13 +222,47 @@ public class SceneController : MonoBehaviour
                 // hide start instruction
                 startInstruction.SetActive(false);
 
-                // hide end instruction
+                // hide rest instruction
                 restInstruction.SetActive(false);
 
                 // occlude screen
                 occluder.SetActive(true);
 
-            // save the data into participant folder
+            if (timer.time <= 5.5)
+            {
+
+                // show estimation instruction
+                estimationInstruction.SetActive(true);
+
+            }
+
+            // allow basket to be moved
+
+            if (Input.GetKey(KeyCode.RightArrow))
+
+            {
+
+                Vector3 basketPosition = basket.transform.position;
+                basketPosition.x += 0.1f;
+                basket.transform.position = basketPosition;
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+
+            {
+
+                Vector3 basketPosition = basket.transform.position;
+                basketPosition.x -= 0.1f;
+                basket.transform.position = basketPosition;
+
+            }
+
+
+
+
+            // save the data into participant folder WHEN ENTER IS PRESSED
+
+            // transition to next state when enter pressed or time up
 
 
             if (trialNr < nrTrials)
@@ -220,13 +281,6 @@ public class SceneController : MonoBehaviour
                     state = State.End;
                 }
             }
-
-            /// set a timer, condition works if time < delay set manually, but countdown doesn't seem to work:
-            //float time = 3;
-            // decrease the value of 'timer' by deltaTime 
-            //time -= Time.deltaTime;
-            //float delay = 2;
-            //if (time < delay)
 
             //   Debug.Log(emitter.transform.position.x);
 
@@ -247,15 +301,21 @@ public class SceneController : MonoBehaviour
                 // hide start instruction
                 startInstruction.SetActive(false);
 
-                // show end instruction
-                restInstruction.SetActive(true);
+                // hide estimation instruction
+                estimationInstruction.SetActive(false);
 
                 // hide occluder
                 occluder.SetActive(false);
 
+                // show background
+                background.SetActive(true);
 
-                // if enter key is pressed transition to next state
-                if (Input.GetKeyDown(KeyCode.Space))
+                // show rest instruction
+                restInstruction.SetActive(true);
+
+
+            // if enter key is pressed transition to next state
+            if (Input.GetKeyDown(KeyCode.Space))
                 {
                     // update trial number
                     trialNr++;
@@ -273,6 +333,9 @@ public class SceneController : MonoBehaviour
             // hide start instruction
             startInstruction.SetActive(false);
 
+            // hide estimation instruction
+            estimationInstruction.SetActive(false);
+
             // hide rest instruction
             restInstruction.SetActive(false);
 
@@ -281,6 +344,9 @@ public class SceneController : MonoBehaviour
 
             // hide occluder
             occluder.SetActive(false);
+
+            // show background
+            background.SetActive(true);
 
         }
 
