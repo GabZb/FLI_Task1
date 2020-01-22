@@ -1,5 +1,8 @@
 ﻿public static class GlobalParameters
 {
+
+    // class variables
+
     private static bool showTrajectory;
     private static bool addVelocity;
 
@@ -7,6 +10,10 @@
 
     private static bool keyControl;
 
+
+    //  properties = extension of class variable and it provides a mechanism to
+    // read, write or change the value of class variable without effecting the
+    // external way of accessing it in our applications.
 
     public static bool ShowTrajectory
     {

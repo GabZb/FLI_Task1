@@ -5,11 +5,13 @@ public class MovementController : MonoBehaviour
     public float Speed = 10f;
 
     private Rigidbody _emitterRigidbody;
+    // public Rigidbody _ballRigidbody; /// 
     private Vector3 _inputs = Vector3.zero;
 
     void Start()
     {
         _emitterRigidbody = GetComponent<Rigidbody>();
+       //  _ballRigidbody = GetComponent<Rigidbody>(); ///
     }
 
     void Update()
