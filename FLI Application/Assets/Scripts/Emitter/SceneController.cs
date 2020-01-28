@@ -7,12 +7,16 @@ using UnityEngine.SceneManagement;
 
 using TMPro;
 
+using System.IO;
+
 public class SceneController : MonoBehaviour
 {
     // settable parameters
-    private float _emitterStartPosition = -12f;
-    private float _emitterEndPosition = 12f;
-    private float _emitterDropPosition = 3f;
+
+
+    //private float _emitterEndPosition = 12f;
+    private float _emitterDropPosition;
+    //private float _emitterStartPosition;
 
     private float _basketStartPosition = 0f;
 
@@ -32,13 +36,15 @@ public class SceneController : MonoBehaviour
     // experiment parameters
 
     private int subjectID;
-    private int nrTrials = 3; // total number of trials
+    private int nrTrials = 5; // total number of trials
     private float estimationMaxDuration = 10f;
 
-    // Lists to define heights, position, velocity
+    // Lists to define heights, velocities, positions 
 
-    private List<float> emitterHeight = new List<float> { 5f, 4.15f, 3f };
-    private List<float> emitterVelocity = new List<float> { 0.03f, 0.1f, 0.01f };
+    private List<float> emitterHeight = new List<float> { 5f, 4.15f, 3f, 3.15f, 5f };
+    private List<float> emitterVelocity = new List<float> { 0.03f, -0.1f, 0.01f, 0.1f, -0.2f };
+    private List<float> emitterStartPosition = new List<float> { -10, 10, -10, -10, 10 }; // influences time it takes for emitter to appear (with velocity)
+    private List<float> emitterDropPosition = new List<float> { -1, 7, -5, 3, 0 };
 
     // parameter tracking
     private int trialNr; // current trial number
@@ -106,73 +112,72 @@ public class SceneController : MonoBehaviour
         // initialise add velocity to true 
         GlobalParameters.AddVelocity = true; // ?
 
-        // initialise emitter velocity to 5f 
-        GlobalParameters.EmitterVelocity = 0.03f; // ?
+// initialise emitter velocity to 5f 
+      //  GlobalParameters.EmitterVelocity = 0.03f; // ?
 
-        // initialise state
-        state = State.GetReady;
 
         // initialize trialNr to 1
         trialNr = 1;
+
+        // initialise state
+        state = State.GetReady;
     }
 
 
 
     private void Update()
     {
-            if (state == State.GetReady)
+        if (state == State.GetReady)
 
 
-                {
-                    // show start instruction
-                    startInstruction.SetActive(true);
+        {
+            // initialise different emitter velocity for each trial
 
-                    // hide estimation instruction
-                    estimationInstruction.SetActive(false);
+            GlobalParameters.EmitterVelocity = emitterVelocity[trialNr-1];
+            emitter.transform.position = new Vector3(emitterStartPosition[trialNr-1], emitter.transform.position.y, emitter.transform.position.z);
+            _emitterDropPosition = emitterDropPosition[trialNr-1];
 
-                    // hide rest instruction
-                    restInstruction.SetActive(false);
+            Debug.Log(trialNr);
+            Debug.Log(emitter.transform.position);
+            Debug.Log(emitter.transform.position.x);
+            Debug.Log(GlobalParameters.EmitterVelocity);
+            // show start instruction
+            startInstruction.SetActive(true);
 
-                    // hide end instruction
-                    endInstruction.SetActive(false);
+            // hide estimation instruction
+            estimationInstruction.SetActive(false);
 
-                    // hide occluder
-                    occluder.SetActive(false);
+            // hide rest instruction
+            restInstruction.SetActive(false);
 
-                    // hide background
-                    background.SetActive(false);
+            // hide end instruction
+            endInstruction.SetActive(false);
 
-                    // set emitter velocity (angular velocities locked)
-                    _emitterRigidbody.velocity = Vector3.zero; // shorthand for writing Vector3(0,0,0)
+            // hide occluder
+            occluder.SetActive(false);
 
-                    // set emitter position
-                    emitter.transform.position = new Vector3(_emitterStartPosition, emitter.transform.position.y, emitter.transform.position.z);
+            // hide background
+            background.SetActive(false);
 
-                    // set basket start position
-                    basket.transform.position = new Vector3(_basketStartPosition, basket.transform.position.y, basket.transform.position.z);
+            // set emitter velocity (angular velocities locked)
+            _emitterRigidbody.velocity = Vector3.zero; // shorthand for writing Vector3(0,0,0)
 
+            // set emitter position
+            //emitter.transform.position = new Vector3(_emitterStartPosition, emitter.transform.position.y, emitter.transform.position.z);
 
+            // set basket start position
+            basket.transform.position = new Vector3(_basketStartPosition, basket.transform.position.y, basket.transform.position.z);
 
             // if enter key is pressed transition to next state
             if (Input.GetKeyDown(KeyCode.Return))
                     {
                         state = State.Task;
                     }
-                }
+        }
 
-            //        // transition to next state
-            //        state = State.Wait;
-            //    }
 
-            //    if (state == State.Wait)
-            //    {
-            //        // if enter key is pressed transition to next state
-            //        if (Input.GetKeyDown(KeyCode.Return))
-            //            state = State.Task;
-            //    }
-
-            if (state == State.Task)
-            {
+       if (state == State.Task)
+       {
                 // hide start instruction
                 startInstruction.SetActive(false);
 
@@ -182,23 +187,20 @@ public class SceneController : MonoBehaviour
                 // hide rest instruction
                 restInstruction.SetActive(false);
 
-
-                // set emitter velocity
+           
+    // set emitter velocity
                 _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
 
-                /// set a timer, condition works if time < delay set manually, but countdown doesn't seem to work:
-                //float time = 3;
-                // decrease the value of 'timer' by deltaTime 
-                //time -= Time.deltaTime;
-                //float delay = 2;
-                //if (time < delay)
 
-                //   Debug.Log(emitter.transform.position.x);
+            //   Debug.Log(emitter.transform.position.x);
 
-                // if position emitter is at drop point, make occluder appear
+            // if position emitter is at drop point, make occluder appear
 
-                //if (Mathf.Approximately(emitter.transform.position.x,_emitterDropPosition))
-                if (emitter.transform.position.x > _emitterDropPosition) // ==
+            //if (Mathf.Approximately(emitter.transform.position.x,_emitterDropPosition))
+            if (emitterVelocity[trialNr - 1] > 0)
+            {
+
+                if (emitter.transform.position.x > _emitterDropPosition) // == <
                 {
                     state = State.Estimation;
 
@@ -206,19 +208,26 @@ public class SceneController : MonoBehaviour
                     timer.time = estimationMaxDuration;
 
                 }
-
-
-
-                // if emitter position is greater than end position, transition to next state
-                //  if (emitter.transform.position.x > _emitterEndPosition)
-                // {
-                //    state = State.Rest;
-
-
             }
 
-            if (state == State.Estimation)
+            else if (emitterVelocity[trialNr - 1] < 0)
+
             {
+
+                if (emitter.transform.position.x < _emitterDropPosition) // == <
+                {
+                    state = State.Estimation;
+
+                    // set timer to duration of next state
+                    timer.time = estimationMaxDuration;
+
+                }
+            }
+
+        }
+
+       if (state == State.Estimation)
+       {
                 // hide start instruction
                 startInstruction.SetActive(false);
 
@@ -228,7 +237,7 @@ public class SceneController : MonoBehaviour
                 // occlude screen
                 occluder.SetActive(true);
 
-            if (timer.time <= 5.5)
+            if (timer.time <= 9.5)
             {
 
                 // show estimation instruction
@@ -258,46 +267,45 @@ public class SceneController : MonoBehaviour
             }
 
 
-
-
-            // save the data into participant folder WHEN ENTER IS PRESSED
-
-            // transition to next state when enter pressed or time up
-
-
             if (trialNr < nrTrials)
             {
-                    if (timer.time <= 0)
-                    {
-                        state = State.Rest;
-                    }
+
+                if (Input.GetKey(KeyCode.Return))
+                {
+                    CreateTextFile();
+                    state = State.Rest;
+                }
+
+                else if (timer.time <= 0)
+                {
+                    state = State.Rest;
+                }
             }
 
             else
 
             {
-                if (timer.time <= 0)
+
+                if (Input.GetKey(KeyCode.Return))
+
+                {
+                    CreateTextFile();
+                    state = State.End;
+                }
+
+                else if (timer.time <= 0)
                 {
                     state = State.End;
                 }
+
             }
-
-            //   Debug.Log(emitter.transform.position.x);
-
-            // if position emitter is at drop point, make occluder appear
+       }
 
 
 
-            // if emitter position is greater than end position, transition to next state
-            //  if (emitter.transform.position.x > _emitterEndPosition)
-            // {
-            //    state = State.Rest;
+       if (state == State.Rest)
 
-
-        }
-
-            if (state == State.Rest)
-            {
+       {
                 // hide start instruction
                 startInstruction.SetActive(false);
 
@@ -324,7 +332,7 @@ public class SceneController : MonoBehaviour
                     state = State.GetReady;
                 }
 
-            }
+       }
 
 
 
@@ -352,7 +360,30 @@ public class SceneController : MonoBehaviour
 
     }
 
+    void CreateTextFile()
+    {
+
+        // Path of the file
+
+        string path = Application.dataPath + "/Location.txt";
+
+        // Create file if it doesn't exist
+
+
+        File.WriteAllText(path, "Location of bucket \n\n");
+
+        // Content of the file
+
+        string content = "chosen location" + transform.position + "\n";
+
+        // Add content to existing file
+
+        File.AppendAllText(path, content); //writealltext will replace text
+
     }
+
+
+}
 
    // public void SetTrial()
    // {
