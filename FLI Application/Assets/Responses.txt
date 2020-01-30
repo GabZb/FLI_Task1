@@ -1,0 +1,40 @@
+
+
+
+Date and time: 20200130 - 111819
+
+trial : 1
+emitter start location : 0
+correct location : 0.0417506788942592
+estimated location : 2.799999
+difference : 2.75824879658487
+response time : 1.19645500183105
+
+trial : 2
+emitter start location : 0
+correct location : -0.132797089497151
+estimated location : 0.8000001
+difference : 0.93279722062737
+response time : 1.55906009674072
+
+trial : 3
+emitter start location : 0
+correct location : 0.0123654838943473
+estimated location : -1.3
+difference : -1.31236555541992
+response time : 1.38648414611816
+
+trial : 4
+emitter start location : 0
+correct location : 0.124885271086967
+estimated location : 0
+difference : -0.124885271086967
+response time : 2.23051834106445
+
+trial : 5
+emitter start location : 0
+correct location : -0.278337869663955
+estimated location : 0
+difference : 0.278337869663955
+response time : 1.00565147399902
+

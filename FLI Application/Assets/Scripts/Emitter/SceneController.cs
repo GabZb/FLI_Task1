@@ -11,12 +11,8 @@ using System.IO;
 
 public class SceneController : MonoBehaviour
 {
+
     // settable parameters
-
-
-    //private float _emitterEndPosition = 12f;
-    private float _emitterDropPosition;
-    //private float _emitterStartPosition;
 
     private float _basketStartPosition = 0f;
 
@@ -35,7 +31,7 @@ public class SceneController : MonoBehaviour
 
     // experiment parameters
 
-    private int subjectID;
+    //private int subjectID;
     private int nrTrials = 5; // total number of trials
     private float estimationMaxDuration = 10f;
 
@@ -51,25 +47,24 @@ public class SceneController : MonoBehaviour
     private float estimationLocation;
     private float estimationDuration;
 
-    //private List<float> estimationLocationList; ?
-    //private List<float> stimationDurationList; ?
-
     // reference to timer class
     public Timer timer;
 
     // state machine
     public enum State
     {
+        Setup,
         GetReady,
+        TransitionToTask,
         Task,
+        TransitionToEstimation,
         Estimation,
-        Rest,
-        End,
+        SaveData,
+        Rest
 
     }
 
     public State state;
-
 
 
     // script references
@@ -84,9 +79,13 @@ public class SceneController : MonoBehaviour
     public GameObject endInstruction;
     public GameObject estimationInstruction;
 
+    public int side;
 
     private void Start()
     {
+
+        // set the path
+        GlobalParameters.Path = Application.dataPath + "/Responses.txt";
 
         // get reference to scripts
         // dropController = GetComponent<DropController>();
@@ -106,41 +105,60 @@ public class SceneController : MonoBehaviour
         // initialise occluder to false
         occluder.SetActive(false);
 
-        // initialise obackground to false
+        // initialise background to false
         background.SetActive(false);
 
         // initialise add velocity to true 
         GlobalParameters.AddVelocity = true; // ?
 
-// initialise emitter velocity to 5f 
-      //  GlobalParameters.EmitterVelocity = 0.03f; // ?
-
 
         // initialize trialNr to 1
         trialNr = 1;
 
+        if (trialNr == 1)
+        {
+
+            CreateTextFile();
+
+        }
+
+
+        // hide end instruction
+        endInstruction.SetActive(false);
+
+
         // initialise state
         state = State.GetReady;
+
+
+        if (emitterStartPosition[trialNr - 1] > 1)
+        {
+            side = 1;
+        }
+
+        if (emitterStartPosition[trialNr - 1] < 1)
+        {
+            side = 0;
+        }
+
     }
 
 
 
     private void Update()
     {
+
         if (state == State.GetReady)
 
 
         {
-            // initialise different emitter velocity for each trial
 
-            GlobalParameters.EmitterVelocity = emitterVelocity[trialNr-1];
-            emitter.transform.position = new Vector3(emitterStartPosition[trialNr-1], emitter.transform.position.y, emitter.transform.position.z);
-            _emitterDropPosition = emitterDropPosition[trialNr-1];
 
-            Debug.Log(trialNr);
-            Debug.Log(emitter.transform.position);
-            Debug.Log(emitter.transform.position.x);
-            Debug.Log(GlobalParameters.EmitterVelocity);
+            // initialise different parameters for each trial
+
+            GlobalParameters.EmitterVelocity = emitterVelocity[trialNr - 1];
+            emitter.transform.position = new Vector3(emitterStartPosition[trialNr - 1], emitterHeight[trialNr - 1], emitter.transform.position.z);
+
             // show start instruction
             startInstruction.SetActive(true);
 
@@ -150,49 +168,45 @@ public class SceneController : MonoBehaviour
             // hide rest instruction
             restInstruction.SetActive(false);
 
-            // hide end instruction
-            endInstruction.SetActive(false);
-
-            // hide occluder
-            occluder.SetActive(false);
-
             // hide background
             background.SetActive(false);
 
             // set emitter velocity (angular velocities locked)
             _emitterRigidbody.velocity = Vector3.zero; // shorthand for writing Vector3(0,0,0)
 
-            // set emitter position
-            //emitter.transform.position = new Vector3(_emitterStartPosition, emitter.transform.position.y, emitter.transform.position.z);
 
             // set basket start position
             basket.transform.position = new Vector3(_basketStartPosition, basket.transform.position.y, basket.transform.position.z);
 
             // if enter key is pressed transition to next state
             if (Input.GetKeyDown(KeyCode.Return))
-                    {
-                        state = State.Task;
-                    }
+            {
+                state = State.Task;
+            }
+
+
         }
 
 
-       if (state == State.Task)
-       {
-                // hide start instruction
-                startInstruction.SetActive(false);
+        if (state == State.Task)
+        {
+            // hide start instruction
+            startInstruction.SetActive(false);
 
-                // hide estimation instruction
-                estimationInstruction.SetActive(false);
+            // hide estimation instruction
+            estimationInstruction.SetActive(false);
 
-                // hide rest instruction
-                restInstruction.SetActive(false);
-
-           
-    // set emitter velocity
-                _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
+            // hide rest instruction
+            restInstruction.SetActive(false);
 
 
-            //   Debug.Log(emitter.transform.position.x);
+            // set emitter velocity
+            _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
+
+
+            //Debug.Log(emitter.transform.position);
+            //Debug.Log(emitter.transform.position.x);
+            //Debug.Log(GlobalParameters.EmitterVelocity);
 
             // if position emitter is at drop point, make occluder appear
 
@@ -200,7 +214,7 @@ public class SceneController : MonoBehaviour
             if (emitterVelocity[trialNr - 1] > 0)
             {
 
-                if (emitter.transform.position.x > _emitterDropPosition) // == <
+                if (emitter.transform.position.x > emitterDropPosition[trialNr - 1]) // == <
                 {
                     state = State.Estimation;
 
@@ -214,7 +228,7 @@ public class SceneController : MonoBehaviour
 
             {
 
-                if (emitter.transform.position.x < _emitterDropPosition) // == <
+                if (emitter.transform.position.x < emitterDropPosition[trialNr - 1]) // == <
                 {
                     state = State.Estimation;
 
@@ -226,16 +240,16 @@ public class SceneController : MonoBehaviour
 
         }
 
-       if (state == State.Estimation)
-       {
-                // hide start instruction
-                startInstruction.SetActive(false);
+        if (state == State.Estimation)
+        {
+            // hide start instruction
+            startInstruction.SetActive(false);
 
-                // hide rest instruction
-                restInstruction.SetActive(false);
+            // hide rest instruction
+            restInstruction.SetActive(false);
 
-                // occlude screen
-                occluder.SetActive(true);
+            // occlude screen
+            occluder.SetActive(true);
 
             if (timer.time <= 9.5)
             {
@@ -267,88 +281,74 @@ public class SceneController : MonoBehaviour
             }
 
 
-            if (trialNr < nrTrials)
-            {
+    //        if (trialNr < nrTrials)
+    //        {
 
                 if (Input.GetKey(KeyCode.Return))
                 {
-                    CreateTextFile();
+                    double responseTime = estimationMaxDuration - timer.time;
+                    ResponseTime = responseTime;
+
+                    CalculateEndPosition();
+                    SaveData();
+
                     state = State.Rest;
+
                 }
 
                 else if (timer.time <= 0)
                 {
+
+                    ResponseTime = 000;
+                    CalculateEndPosition();
+                    SaveData();
+
                     state = State.Rest;
+
                 }
-            }
+    //        }
 
-            else
+    //        else
 
-            {
+    //        {
 
-                if (Input.GetKey(KeyCode.Return))
+    //            if (Input.GetKey(KeyCode.Return))
 
-                {
-                    CreateTextFile();
-                    state = State.End;
-                }
+    //            {
+    //                double responseTime = estimationMaxDuration - timer.time;
+    //                ResponseTime = responseTime;
+    //                Debug.Log(responseTime);
 
-                else if (timer.time <= 0)
-                {
-                    state = State.End;
-                }
+    //                CalculateEndPosition();
+    //                SaveData();
 
-            }
-       }
+    //                state = State.End;
 
+    //            }
 
+     //           else if (timer.time <= 0)
+     //           {
+     //               CalculateEndPosition();
+     //               SaveData();
 
-       if (state == State.Rest)
+     //               state = State.End;
 
-       {
-                // hide start instruction
-                startInstruction.SetActive(false);
+      //          }
 
-                // hide estimation instruction
-                estimationInstruction.SetActive(false);
-
-                // hide occluder
-                occluder.SetActive(false);
-
-                // show background
-                background.SetActive(true);
-
-                // show rest instruction
-                restInstruction.SetActive(true);
-
-
-            // if enter key is pressed transition to next state
-            if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    // update trial number
-                    trialNr++;
-
-                    // transition to GetReady state
-                    state = State.GetReady;
-                }
-
-       }
+     //       }
+        }
 
 
 
-        if (state == State.End)
+        if (state == State.Rest)
+
         {
+
             // hide start instruction
             startInstruction.SetActive(false);
 
             // hide estimation instruction
             estimationInstruction.SetActive(false);
-
-            // hide rest instruction
-            restInstruction.SetActive(false);
-
-            // show end instruction
-            endInstruction.SetActive(true);
 
             // hide occluder
             occluder.SetActive(false);
@@ -356,38 +356,89 @@ public class SceneController : MonoBehaviour
             // show background
             background.SetActive(true);
 
+            if (trialNr < nrTrials)
+            {
+
+                // show rest instruction
+                restInstruction.SetActive(true);
+
+
+                // if enter key is pressed transition to next state
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    // update trial number
+                    trialNr++;
+
+                    // transition to GetReady state
+                    state = State.GetReady;
+                }
+            }
+
+            else
+            {
+
+                // hide rest instruction
+                restInstruction.SetActive(false);
+
+                // show end instruction
+                endInstruction.SetActive(true);
+
+            }
         }
+
 
     }
 
+    // make local variables accessible in various methods
+    double Difference { get; set; }
+    double LandingPosition { get; set; }
+    double ResponseTime { get; set; }
+
     void CreateTextFile()
+
     {
+        
+        File.WriteAllText(GlobalParameters.Path, "\n\n\n" + "Date and time: " + DateTime.Now.ToString("yyyyMMdd - HHmmss") + "\n\n");
 
-        // Path of the file
+    }
 
-        string path = Application.dataPath + "/Location.txt";
-
-        // Create file if it doesn't exist
-
-
-        File.WriteAllText(path, "Location of bucket \n\n");
+    void SaveData()
+    {
 
         // Content of the file
 
-        string content = "chosen location" + transform.position + "\n";
+        string content = "trial : " + trialNr + "\n" + "emitter start location : " + side + "\n" + "correct location : " + LandingPosition + "\n" + "estimated location : "
+            + basket.transform.position.x + "\n" + "difference : " + Difference + "\n" + "response time : " + ResponseTime + "\n\n";
+
 
         // Add content to existing file
 
-        File.AppendAllText(path, content); //writealltext will replace text
+        File.AppendAllText(GlobalParameters.Path, content); //writealltext will replace text
+
+    }
+
+    void CalculateEndPosition()
+
+    {
+
+
+        double gravity = 9.81;
+
+        // equation for vertical part (- basket position because it is negative)
+        double travelTime = Math.Sqrt((2 * (emitterHeight[trialNr - 1] - basket.transform.position.y)) / gravity);
+
+        // equation for horizontal part
+        double landingPosition = emitterVelocity[trialNr - 1] * travelTime;
+
+        LandingPosition = landingPosition;
+
+        double difference = basket.transform.position.x - landingPosition;
+
+        Difference = difference;
+
 
     }
 
 
 }
-
-   // public void SetTrial()
-   // {
-   //     // transition to initialisation of trial state
-   //     state = State.Setup;
-   //}
 
