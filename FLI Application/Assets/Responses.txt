@@ -1,40 +1,40 @@
 
 
 
-Date and time: 20200130 - 111819
+Date and time: 20200131 - 133134
 
 trial : 1
 emitter start location : 0
-correct location : 0.0417506788942592
-estimated location : 2.799999
-difference : 2.75824879658487
-response time : 1.19645500183105
+correct location : 5.95844663790994
+estimated location : 3.299999
+difference : -2.65844763926797
+response time : 1.75324249267578
 
 trial : 2
-emitter start location : 0
-correct location : -0.132797089497151
-estimated location : 0.8000001
-difference : 0.93279722062737
-response time : 1.55906009674072
+emitter start location : 1
+correct location : 3.01608737445038
+estimated location : 1.8
+difference : -1.21608706450623
+response time : 1.27383422851563
 
 trial : 3
 emitter start location : 0
-correct location : 0.0123654838943473
-estimated location : -1.3
-difference : -1.31236555541992
-response time : 1.38648414611816
+correct location : -0.0538063317050206
+estimated location : -2.1
+difference : -2.04619381134613
+response time : 1.65817928314209
 
 trial : 4
 emitter start location : 0
-correct location : 0.124885271086967
-estimated location : 0
-difference : -0.124885271086967
-response time : 2.23051834106445
+correct location : 5.49770538452063
+estimated location : 7.499995
+difference : 2.00228984710779
+response time : 3.6078314781189
 
 trial : 5
-emitter start location : 0
-correct location : -0.278337869663955
-estimated location : 0
-difference : 0.278337869663955
-response time : 1.00565147399902
+emitter start location : 1
+correct location : -8.35013596549193
+estimated location : -4.999998
+difference : 3.35013834967772
+response time : 2.38861608505249
 
