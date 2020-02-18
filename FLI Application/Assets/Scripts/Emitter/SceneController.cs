@@ -34,26 +34,26 @@ public class SceneController : MonoBehaviour
     // experiment parameters
 
     int subjectID = 01; // make it inputable
-    private int nrTrials = 3; // total number of trials
+    private int nrTrials = 72; // total number of trials
     private float estimationMaxDuration = 10f;
 
     // Lists to define heights, velocities, positions 
 
-    //  private List<float> emitterHeight = new List<float> { 4.15f, 4.15f, 4.15f, 4.15f, 4.15f };
-    //  private List<float> emitterVelocity = new List<float> { 1f, -3f, 5f, 2f, -6f };
-    //   private List<float> emitterStartPosition = new List<float> { -10, 10, -10, -10, 10 }; // influences time it takes for emitter to appear (with velocity)
-    //   private List<float> emitterDropPosition = new List<float> { -1, 7, -5, 3, 0 };
-
-    private List<float> emitterStartPosition = new List<float> { -10, 10, 10, 10, 10, -10, -10, -10, 10, 10, 10, 10, -10, -10, -10, 10, -10, 10, 10, 10, -10, 10, -10, 10, -10, -10, 10, 10, 10, 10, -10, -10, -10, 10, 10, 10, -10, 10, 10, -10, -10, 10, -10, -10, -10, -10, -10, 10, 10, 10, -10, -10, 10, 10, 10, -10, -10, -10, -10, 10 }; // influences time it takes for emitter to appear (with velocity)
-    private List<float> emitterVelocity = new List<float> { 4.5f, -4.5f, -1.5f, -1.5f, -3f, 3f, 1.5f, 4.5f, -4.5f, -1.5f, -1.5f, -3f, 4.5f, 1.5f, 3f, -1.5f, 1.5f, -4.5f, -3f, -1.5f, 4.5f, -4.5f, 4.5f, -4.5f, 3f, 1.5f, -3f, -3f, -4.5f, -3f, 1.5f, 3f, 4.5f, -3f, -1.5f, -4.5f, 1.5f, -3f, -1.5f, 3f, 3f, -4.5f, 1.5f, 4.5f, 4.5f, 4.5f, 3f, -1.5f, -4.5f, -4.5f, 4.5f, 3f, -3f, -1.5f, -3f, 1.5f, 1.5f, 1.5f, 3f, -3f };
-    private List<float> emitterHeight = new List<float> { 1f, 5f, 5f, 1f, 3f, 5f, 3f, 5f, 3f, 5f, 1f, 3f, 5f, 5f, 3f, 3f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 1f, 5f, 5f, 3f, 1f, 5f, 1f, 3f, 3f, 5f, 1f, 5f, 3f, 3f, 3f, 5f, 5f, 3f, 1f, 3f, 1f, 5f, 3f, 5f, 3f, 1f, 3f, 1f, 1f, 1f, 3f, 1f, 1f, 5f, 5f, 1f };
-    private List<float> emitterDropPosition = new List<float> { -3, 0, -3, 2, 1, 1, 1, 2, -0, -2, -3, -0, -2, -2, -1, -1, 2, 2, -1, 1, 0, 1, 3, -2, 2, 3, -2, 2, 1, -3, -2, -2, 0, 1, 3, -3, 0, 0, 0, -1, 2, -2, -1, 3, -1, -1, 1, 2, -3, 3, 2, -3, -2, 1, -1, 3, -3, -1, 3, 3 };
+/// <For 60 trials, 30 right and 30 left, randomized>
+    private List<float> emitterStartPosition = new List<float> { 10, -10, -10, -10, 10, 10, 10, -10, -10, 10, 10, 10, 10, -10, 10, 10, -10, -10, -10, 10, 10, -10, -10, 10, 10, 10, 10, -10, 10, -10, -10, 10, 10, -10, -10, 10, 10, 10, 10, 10, -10, 10, 10, -10, -10, 10, -10, -10, -10, 10, 10, 10, -10, -10, -10, 10, 10, 10, 10, -10, 10, -10, 10, 10, -10, -10, -10, 10, -10, 10, -10, 10 }; // influences time it takes for emitter to appear (with velocity)
+    private List<float> emitterVelocity = new List<float> { -1.5f, 4.5f, 3f, 1.5f, -3f, -1.5f, -1.5f, 3f, 1.5f, -3f, -1.5f, -3f, -4.5f, 4.5f, -4.5f, -4.5f, 4.5f, 3f, 1.5f, -1.5f, -3f, 3f, 4.5f, -1.5f, -3f, -4.5f, -1.5f, 3f, -1.5f, 3f, 4.5f, -4.5f, -3f, 4.5f, 1.5f, -4.5f, -4.5f, -4.5f, -1.5f, -1.5f, 4.5f, -4.5f, -3f, 1.5f, 4.5f, -3f, 1.5f, 4.5f, 3f, -3f, -1.5f, -1.5f, 3f, 3f, 4.5f, -4.5f, -4.5f, -3f, -1.5f, 4.5f, -1.5f, 3f, -3f, -1.5f, 3f, 3f, 4.5f, -1.5f, 1.5f, -3f, 1.5f, -4.5f };
+    private List<float> emitterHeight = new List<float> { 3f, 1f, 3f, 1f, 5f, 5f, 1f, 5f, 5f, 1f, 3f, 3f, 5f, 3f, 3f, 1f, 5f, 1f, 1f, 5f, 5f, 5f, 3f, 3f, 3f, 1f, 3f, 1f, 1f, 3f, 1f, 3f, 1f, 5f, 5f, 5f, 5f, 1f, 3f, 1f, 1f, 3f, 3f, 1f, 5f, 5f, 5f, 3f, 3f, 1f, 5f, 3f, 5f, 1f, 1f, 3f, 5f, 3f, 3f, 5f, 5f, 5f, 1f, 3f, 3f, 1f, 3f, 1f, 5f, 5f, 1f, 1f };
+    private List<float> emitterDropPosition = new List<float> { 3, -3, -3, -3, 3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, 3, -3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, 3, -3, 3, 3, -3, -3, 3, -3, -3, -3, 3, 3, 3, -3, -3, -3, 3, 3, 3, 3, -3, 3, -3, 3, 3, -3, -3, -3, 3, -3, 3, -3, 3 };
 
     // parameter tracking
     private int trialNr; // current trial number
 
     // reference to timer class
     public Timer timer;
+
+    // actualLandingPosition, which might be slightly different (depending on the velocity) to the pre-deptermined landingPosition
+    private List<float> actualDropPosition = new List<float> { 3, -3, -3, -3, 3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, 3, -3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, 3, -3, 3, 3, -3, -3, 3, -3, -3, -3, 3, 3, 3, -3, -3, -3, 3, 3, 3, 3, -3, 3, -3, 3, 3, -3, -3, -3, 3, -3, 3, -3, 3 };
+
 
     // task state machine
     public enum State
@@ -116,7 +116,7 @@ public class SceneController : MonoBehaviour
         GlobalParameters.AddVelocity = true; // ?
 
         // initialize trialNr to 1
-        trialNr = 1;
+        trialNr =58;
 
         // initialise state 
         state = State.Wait;
@@ -157,7 +157,7 @@ public class SceneController : MonoBehaviour
         {
 
 
-            //            //make emitter visible
+           //make emitter visible
             _emitterMeshRend.enabled = true;
 
 //            //make ball visible
@@ -186,14 +186,14 @@ public class SceneController : MonoBehaviour
             emitter.transform.position = new Vector3(emitterStartPosition[trialNr - 1], emitterHeight[trialNr - 1], emitter.transform.position.z);
 
             // save side from which the emitter arrives
-            if (emitterStartPosition[trialNr - 1] > 1)
+            if (emitterStartPosition[trialNr - 1] > 0)
             {
-                side = 1;
+                side = 1; // right
             }
 
             else 
             {
-                side = 0;
+                side = 0; // left
             }
 
             state = State.GetReady;
@@ -233,58 +233,32 @@ public class SceneController : MonoBehaviour
         if (state == State.Task)
         {
 
-            //if (Mathf.Approximately(emitter.transform.position.x,_emitterDropPosition))
-
-
-            // if position emitter is at drop point,
-            if (emitterVelocity[trialNr - 1] > 0)
+            // if position emitter is past dropPoint, occlude screen and transition to next state
+           // if (emitterVelocity[trialNr - 1] > 0)
+               if (side == 1)
                {
+
+               // if (Mathf.Approximately(emitter.transform.position.x, emitterDropPosition[trialNr - 1]))
+                  if (emitter.transform.position.x < emitterDropPosition[trialNr - 1]) // == <
+                
+                  {
+                      actualDropPosition[trialNr - 1] = emitter.transform.position.x;
+
+                      state = State.TransitionToEstimation;                    
+                  }
+            }
+
+            else if (side == 0) //if (emitterVelocity[trialNr - 1] < 0)
+
+            {
 
                   if (emitter.transform.position.x > emitterDropPosition[trialNr - 1]) // == <
                   {
+                      actualDropPosition[trialNr - 1] = emitter.transform.position.x;
 
                       state = State.TransitionToEstimation;
-
-                    //make emitter and ball freeze
-                    GlobalParameters.EmitterVelocity = -emitterVelocity[trialNr - 1];
-                    _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
-
-                    // make emitter disappear
-                    _emitterMeshRend.enabled = false;
-
-////                    //make ball disappear
-                   _ballMeshRend.enabled = false;
-
- //                  occluder.SetActive(true);
-
-                    
-                }
+                  }
             }
-
-            else
-
-               {
-
-                  if (emitter.transform.position.x < emitterDropPosition[trialNr - 1]) // == <
-                  {
-
-                      state = State.TransitionToEstimation;
-
-                    //make emitter and ball freeze
-                    GlobalParameters.EmitterVelocity = - emitterVelocity[trialNr - 1];
-                    _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
-
-                    // make emitter disappear
-                    _emitterMeshRend.enabled = false;
-
-////                   //make ball disappear
-                    _ballMeshRend.enabled = false;
-
- //                   occluder.SetActive(true);
-
-
-                }
-               }
 
         }
 
@@ -297,13 +271,86 @@ public class SceneController : MonoBehaviour
             // hide rest instruction
             restInstruction.SetActive(false);
 
+            if (trialNr <= 18) // make emitter and ball disappear
+            {
+                // make emitter disappear
+                _emitterMeshRend.enabled = false;
+
+                //make ball disappear
+                _ballMeshRend.enabled = false;
+
+                // set timer to duration of next state
+                timer.time = estimationMaxDuration;
+
+                state = State.Estimation;
+            }
+
+            else if (trialNr > 18 && trialNr <= 36) // occlude both emitter and ball
+            {
+
+                // make emitter disappear
+                _emitterMeshRend.enabled = false;
+
+                //make ball disappear
+                _ballMeshRend.enabled = false;
+
+                // occlude entire screen
+                occluder.SetActive(true);
+
+                // set timer to duration of next state
+                timer.time = estimationMaxDuration;
+
+                state = State.Estimation;
+
+            }
+
+            else if (trialNr > 36 && trialNr <= 54) // make only emitter disappear
+            {
+                //make emitter and ball freeze (has to be both and not just ball because ball is a child of emitter)
+                GlobalParameters.EmitterVelocity = - emitterVelocity[trialNr - 1];
+                _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
+
+                // do not occlude screen
+                occluder.SetActive(false);
+
+                // make emitter disappear
+                _emitterMeshRend.enabled = false;
+
+                // set timer to duration of next state
+                timer.time = estimationMaxDuration;
+
+                state = State.Estimation;
+
+            }
+
+            else if (trialNr > 54 && trialNr <= 72) // occlude only emitter
+            {
+
+                //make emitter and ball freeze (has to be both and not just ball because ball is a child of emitter)
+                GlobalParameters.EmitterVelocity = -emitterVelocity[trialNr - 1];
+                _emitterRigidbody.AddForce(new Vector3(GlobalParameters.EmitterVelocity, 0f, 0f), ForceMode.VelocityChange);
+
+                // make emitter disappear
+                _emitterMeshRend.enabled = false;
+
+                // occlude entire screen
+                occluder.SetActive(true);
+
+                // set timer to duration of next state
+                timer.time = estimationMaxDuration;
+
+                state = State.Estimation;
+            }
+
+
+
             // occlude screen
-//            occluder.SetActive(true);
+            //            occluder.SetActive(true);
 
             // set timer to duration of next state
-            timer.time = estimationMaxDuration;
+//            timer.time = estimationMaxDuration;
 
-            state = State.Estimation;
+ //           state = State.Estimation;
 
         }
 
@@ -430,7 +477,7 @@ public class SceneController : MonoBehaviour
     //    string content = "trial : " + trialNr + "\n" + "emitter start location : " + side + "\n" + "correct location : " + LandingPosition + "\n" + "estimated location : "
     //        + basket.transform.position.x + "\n" + "difference : " + Difference + "\n" + "response time : " + ResponseTime + "\n\n";
 
-        string content = "\n\n" + trialNr + " " + (emitterHeight[trialNr - 1] + 3.6f - 0.5f) + " " + side + " " + emitterVelocity[trialNr - 1] + " " + LandingPosition + " " + basket.transform.position.x + " " + Difference + " " + ResponseTime;
+        string content = "\n\n" + trialNr + " " + (emitterHeight[trialNr - 1] + 3.6f - 0.5f) + " " + side + " " + emitterVelocity[trialNr - 1] + " " + LandingPosition + " " + basket.transform.position.x + " " + Difference + " " + ResponseTime + "predet dropPosition" + emitterDropPosition[trialNr - 1] + "actual dropPosition" + actualDropPosition[trialNr - 1];
 
         // Add content to existing file
         File.AppendAllText(GlobalParameters.Path, content); //writealltext will replace text
@@ -450,7 +497,7 @@ public class SceneController : MonoBehaviour
         // equation for horizontal part
         double horDistance = ((emitterVelocity[trialNr - 1] * travelTime)); // horizontal distance travelled
 
-        double landingPosition = emitterDropPosition[trialNr - 1] + horDistance;
+        double landingPosition = actualDropPosition[trialNr - 1] + horDistance; // changed here
 
         LandingPosition = landingPosition;
 

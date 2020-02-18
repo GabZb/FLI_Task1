@@ -51,7 +51,6 @@ public class Instructions : MonoBehaviour
     {
 
 
-
         _emitterMeshRend = emitter.GetComponent<MeshRenderer>();
         _ballMeshRend = ball.GetComponent<MeshRenderer>();
 
@@ -96,6 +95,7 @@ public class Instructions : MonoBehaviour
 
         if (state == State.Emitter)
         {
+            float time1 = timer.time;
 
             // hide background
             background.SetActive(false);
@@ -108,17 +108,19 @@ public class Instructions : MonoBehaviour
             Instructions_4.SetActive(false);
             Instructions_5.SetActive(false);
 
-            if (timer.time <= 73)
+            if (timer.time <= 72)
             {
-                // make emitter disappear
-                _emitterMeshRend.enabled = false;
 
-                //make ball disappear
-                _ballMeshRend.enabled = false;
+                    // make emitter disappear
+                    _emitterMeshRend.enabled = false;
 
-                // make instructions appear
-                Instructions_1.SetActive(false);
-                Instructions_11.SetActive(true);
+                    //make ball disappear
+                    _ballMeshRend.enabled = false;
+
+                    // make instructions appear
+                    Instructions_1.SetActive(false);
+                    Instructions_11.SetActive(true);
+
             }
 
 
