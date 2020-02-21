@@ -4,25 +4,10 @@ using UnityEngine;
 
 public class Instructions : MonoBehaviour
 {
+
     // reference to timer class
     public Timer timer;
 
-    private float instructionDuration = 80f;
-
-    // task state machine
-    public enum State
-    {
-        Start,
-        Emitter,
-        Arrows,
-        Basket,
-        EndEstimation,
-        Questions,
-        EndInstructions
-
-    }
-
-    public State state;
 
     // specific instructions
     public GameObject Instructions_0;
@@ -32,6 +17,11 @@ public class Instructions : MonoBehaviour
     public GameObject Instructions_4;
     public GameObject Instructions_5;
     public GameObject Instructions_11;
+    public GameObject Instructions_12;
+    public GameObject Instructions_13;
+    public GameObject Instructions_14;
+    public GameObject Instructions_15;
+
 
     public GameObject background;
 
@@ -43,8 +33,29 @@ public class Instructions : MonoBehaviour
     public GameObject ball;
     private MeshRenderer _ballMeshRend;
 
+
+    public GameObject occluder;
+
     //  private Rigidbody _basketRigidbody;
 
+    // task state machine
+    public enum State
+    {
+        GeneralInstructions,
+        Start,
+        Emitter1,
+        Emitter2,
+        Emitter3,
+        Emitter4,
+        Arrows,
+        Basket,
+        EndEstimation,
+        Questions,
+        EndInstructions
+
+    }
+
+    public State state;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +73,6 @@ public class Instructions : MonoBehaviour
 
         // show instructions
         Instructions_0.SetActive(true);
-
         Instructions_1.SetActive(false);
         Instructions_2.SetActive(false);
         Instructions_3.SetActive(false);
@@ -72,7 +82,7 @@ public class Instructions : MonoBehaviour
 
         Instructions_11.SetActive(false);
 
-        state = State.Start;
+        state = State.GeneralInstructions;
 
     }
 
@@ -80,24 +90,77 @@ public class Instructions : MonoBehaviour
     void Update()
     {
 
-        /// instruction states
-
-        if (state == State.Start)
+        switch (state)
         {
 
+            //    if (Input.GetKeyDown(KeyCode.Return))
+            //    {
+            case State.GeneralInstructions:
+              if (Input.GetKeyDown(KeyCode.Return))
+                    state = State.Start;
+                break;
+
+            case State.Start:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.Emitter1;
+                break;
+
+            case State.Emitter1:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.Emitter2;
+                break;
+
+
+            case State.Emitter2:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.Emitter3;
+                break;
+
+            case State.Emitter3:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.Emitter4;
+                break;
+
+            case State.Emitter4:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.Arrows;
+                break;
+
+            case State.Arrows:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.Basket;
+                break;
+
+            case State.Basket:
+              if (Input.GetKeyDown(KeyCode.Return))
+                state = State.EndEstimation;
+                break;
+
+            case State.EndEstimation:
             if (Input.GetKeyDown(KeyCode.Return))
-            {
-                timer.time = instructionDuration;
-                state = State.Emitter;
-            }
+                state = State.Questions;
+                break;
 
         }
 
-        if (state == State.Emitter)
-        {
-            float time1 = timer.time;
+        //    }
+        /// instruction states
 
-            // hide background
+        if (state == State.GeneralInstructions)
+        {
+            // show background
+            background.SetActive(true);
+
+            // show instructions
+            Instructions_0.SetActive(true);
+
+            timer.time = 5.5f;
+
+        }
+
+        if (state == State.Start)
+        {
+            // show background
             background.SetActive(false);
 
             // show correct instructions
@@ -108,27 +171,178 @@ public class Instructions : MonoBehaviour
             Instructions_4.SetActive(false);
             Instructions_5.SetActive(false);
 
-            if (timer.time <= 72)
+            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
+            Instructions_13.SetActive(false);
+            Instructions_14.SetActive(false);
+            Instructions_15.SetActive(false);
+
+            emitter.transform.position = new Vector3(-10, emitter.transform.position.y, emitter.transform.position.z);
+
+
+            if (timer.time <= 4.5)
+
             {
+                // set basket start position
+                emitter.transform.position = new Vector3(-8f, emitter.transform.position.y, emitter.transform.position.z);
+            }
 
-                    // make emitter disappear
-                    _emitterMeshRend.enabled = false;
+            if (timer.time <= 4)
 
-                    //make ball disappear
-                    _ballMeshRend.enabled = false;
+            {
+                // set basket start position
+                emitter.transform.position = new Vector3(-7f, emitter.transform.position.y, emitter.transform.position.z);
+            }
 
-                    // make instructions appear
-                    Instructions_1.SetActive(false);
-                    Instructions_11.SetActive(true);
+            if (timer.time <= 3.5)
+
+            {
+                // set basket start position
+                emitter.transform.position = new Vector3(-6f, emitter.transform.position.y, emitter.transform.position.z);
 
             }
 
+            if (timer.time <= 3)
 
-            if (timer.time <= 65)
             {
-                state = State.Arrows;
+                // set basket start position
+                emitter.transform.position = new Vector3(-5f, emitter.transform.position.y, emitter.transform.position.z);
             }
 
+            if (timer.time <= 2.5)
+
+            {
+                // set basket start position
+                emitter.transform.position = new Vector3(-4f, emitter.transform.position.y, emitter.transform.position.z);
+            }
+
+            if (timer.time <= 2)
+
+            {
+                // set basket start position
+                emitter.transform.position = new Vector3(-3f, emitter.transform.position.y, emitter.transform.position.z);
+            }
+
+            if (timer.time <= 1.5)
+
+            {
+                // set basket start position
+                emitter.transform.position = new Vector3(-2f, emitter.transform.position.y, emitter.transform.position.z);
+            }
+
+            if (timer.time <= 1)
+
+            {
+                // set basket start position
+                emitter.transform.position = new Vector3(-1f, emitter.transform.position.y, emitter.transform.position.z);
+            }
+
+            if (timer.time <= 0.5)
+            {
+                Instructions_11.SetActive(true);
+            }
+
+        }
+
+        if (state == State.Emitter1)
+        {
+
+            // show correct instructions
+            Instructions_0.SetActive(false);
+            Instructions_1.SetActive(false);
+            Instructions_2.SetActive(false);
+            Instructions_3.SetActive(false);
+            Instructions_4.SetActive(false);
+            Instructions_5.SetActive(false);
+
+            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(true);
+            Instructions_13.SetActive(false);
+            Instructions_14.SetActive(false);
+            Instructions_15.SetActive(false);
+
+            // make emitter disappear
+            _emitterMeshRend.enabled = false;
+
+            //make ball disappear
+            _ballMeshRend.enabled = false;
+
+        }
+
+
+        if (state == State.Emitter2)
+        {
+
+
+            // show correct instructions
+            Instructions_0.SetActive(false);
+            Instructions_1.SetActive(false);
+            Instructions_2.SetActive(false);
+            Instructions_3.SetActive(false);
+            Instructions_4.SetActive(false);
+            Instructions_5.SetActive(false);
+
+            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
+            Instructions_13.SetActive(true);
+            Instructions_14.SetActive(false);
+            Instructions_15.SetActive(false);
+
+            // make occluder appear 
+            occluder.SetActive(true);
+        }
+
+
+        if (state == State.Emitter3)
+        {
+
+            // show correct instructions
+            Instructions_0.SetActive(false);
+            Instructions_1.SetActive(false);
+            Instructions_2.SetActive(false);
+            Instructions_3.SetActive(false);
+            Instructions_4.SetActive(false);
+            Instructions_5.SetActive(false);
+
+            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
+            Instructions_13.SetActive(false);
+            Instructions_14.SetActive(true);
+            Instructions_15.SetActive(false);
+
+            // make occluder disappear
+            occluder.SetActive(false);
+
+            // make emitter disappear
+            _emitterMeshRend.enabled = false;
+
+            //make ball appear
+            _ballMeshRend.enabled = true;
+        }
+
+
+        if (state == State.Emitter4)
+        {
+
+            // show correct instructions
+            Instructions_0.SetActive(false);
+            Instructions_1.SetActive(false);
+            Instructions_2.SetActive(false);
+            Instructions_3.SetActive(false);
+            Instructions_4.SetActive(false);
+            Instructions_5.SetActive(false);
+
+            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
+            Instructions_13.SetActive(false);
+            Instructions_14.SetActive(false);
+            Instructions_15.SetActive(true);
+
+            // make occluder appear
+            occluder.SetActive(true);
+
+            //make ball appear
+            _ballMeshRend.enabled = true;
         }
 
 
@@ -145,13 +359,18 @@ public class Instructions : MonoBehaviour
             Instructions_5.SetActive(false);
 
             Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
+            Instructions_13.SetActive(false);
+            Instructions_14.SetActive(false);
+            Instructions_15.SetActive(false);
 
+            // make occluder disappear
+            occluder.SetActive(false);
 
+            //make ball disappear
+            _ballMeshRend.enabled = false;
 
-            if (timer.time <= 60)
-            {
-                state = State.Basket;
-            }
+            timer.time = 5;
 
         }
 
@@ -165,26 +384,26 @@ public class Instructions : MonoBehaviour
             Instructions_4.SetActive(false);
             Instructions_5.SetActive(false);
 
-            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
 
             basket.transform.position = new Vector3(basket.transform.position.x, basket.transform.position.y, basket.transform.position.z);
 
 
-            if (timer.time <= 55)
+            if (timer.time <= 4.5)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(2f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 54)
+            if (timer.time <= 4)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(4f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 53)
+            if (timer.time <= 3.5)
 
             {
                 // set basket start position
@@ -192,59 +411,52 @@ public class Instructions : MonoBehaviour
 
             }
 
-            if (timer.time <= 52)
+            if (timer.time <= 3)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(4f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 51)
+            if (timer.time <= 2.5)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(2f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 50)
+            if (timer.time <= 2)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(0f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 49)
+            if (timer.time <= 1.5)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(-2f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 48)
+            if (timer.time <= 1)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(-4f, basket.transform.position.y, basket.transform.position.z);
             }
 
-            if (timer.time <= 47)
+            if (timer.time <= 0.5)
 
             {
                 // set basket start position
                 basket.transform.position = new Vector3(-6f, basket.transform.position.y, basket.transform.position.z);
             }
 
-
-            if (timer.time <= 45)
-            {
-                state = State.EndEstimation;
-            }
-
         }
 
         if (state == State.EndEstimation)
         {
-
 
             // show correct instructions
             Instructions_0.SetActive(false);
@@ -253,12 +465,7 @@ public class Instructions : MonoBehaviour
             Instructions_3.SetActive(false);
             Instructions_4.SetActive(true);
             Instructions_5.SetActive(false);
-            Instructions_11.SetActive(false);
-
-            if (timer.time <= 37)
-            {
-                state = State.Questions;
-            }
+            Instructions_12.SetActive(false);
 
         }
 
@@ -273,28 +480,28 @@ public class Instructions : MonoBehaviour
             Instructions_3.SetActive(false);
             Instructions_4.SetActive(false);
             Instructions_5.SetActive(true);
-            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
+
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-
                 state = State.EndInstructions;
-
             }
+
 
         }
 
         if (state == State.EndInstructions)
         {
 
+            // show correct instructions
             Instructions_0.SetActive(false);
-
             Instructions_1.SetActive(false);
             Instructions_2.SetActive(false);
             Instructions_3.SetActive(false);
             Instructions_4.SetActive(false);
             Instructions_5.SetActive(false);
-            Instructions_11.SetActive(false);
+            Instructions_12.SetActive(false);
         }
     }
 }

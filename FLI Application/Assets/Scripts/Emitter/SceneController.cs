@@ -13,7 +13,6 @@ public class SceneController : MonoBehaviour
 {
 
     // settable parameters
-
     private float _basketStartPosition = 0f;
 
     // objects set in inspector
@@ -38,22 +37,19 @@ public class SceneController : MonoBehaviour
     private float estimationMaxDuration = 10f;
 
     // Lists to define heights, velocities, positions 
-
-/// <For 60 trials, 30 right and 30 left, randomized>
     private List<float> emitterStartPosition = new List<float> { 10, -10, -10, -10, 10, 10, 10, -10, -10, 10, 10, 10, 10, -10, 10, 10, -10, -10, -10, 10, 10, -10, -10, 10, 10, 10, 10, -10, 10, -10, -10, 10, 10, -10, -10, 10, 10, 10, 10, 10, -10, 10, 10, -10, -10, 10, -10, -10, -10, 10, 10, 10, -10, -10, -10, 10, 10, 10, 10, -10, 10, -10, 10, 10, -10, -10, -10, 10, -10, 10, -10, 10 }; // influences time it takes for emitter to appear (with velocity)
     private List<float> emitterVelocity = new List<float> { -1.5f, 4.5f, 3f, 1.5f, -3f, -1.5f, -1.5f, 3f, 1.5f, -3f, -1.5f, -3f, -4.5f, 4.5f, -4.5f, -4.5f, 4.5f, 3f, 1.5f, -1.5f, -3f, 3f, 4.5f, -1.5f, -3f, -4.5f, -1.5f, 3f, -1.5f, 3f, 4.5f, -4.5f, -3f, 4.5f, 1.5f, -4.5f, -4.5f, -4.5f, -1.5f, -1.5f, 4.5f, -4.5f, -3f, 1.5f, 4.5f, -3f, 1.5f, 4.5f, 3f, -3f, -1.5f, -1.5f, 3f, 3f, 4.5f, -4.5f, -4.5f, -3f, -1.5f, 4.5f, -1.5f, 3f, -3f, -1.5f, 3f, 3f, 4.5f, -1.5f, 1.5f, -3f, 1.5f, -4.5f };
     private List<float> emitterHeight = new List<float> { 3f, 1f, 3f, 1f, 5f, 5f, 1f, 5f, 5f, 1f, 3f, 3f, 5f, 3f, 3f, 1f, 5f, 1f, 1f, 5f, 5f, 5f, 3f, 3f, 3f, 1f, 3f, 1f, 1f, 3f, 1f, 3f, 1f, 5f, 5f, 5f, 5f, 1f, 3f, 1f, 1f, 3f, 3f, 1f, 5f, 5f, 5f, 3f, 3f, 1f, 5f, 3f, 5f, 1f, 1f, 3f, 5f, 3f, 3f, 5f, 5f, 5f, 1f, 3f, 3f, 1f, 3f, 1f, 5f, 5f, 1f, 1f };
     private List<float> emitterDropPosition = new List<float> { 3, -3, -3, -3, 3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, 3, -3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, 3, -3, 3, 3, -3, -3, 3, -3, -3, -3, 3, 3, 3, -3, -3, -3, 3, 3, 3, 3, -3, 3, -3, 3, 3, -3, -3, -3, 3, -3, 3, -3, 3 };
+
+    // for saving actualLandingPosition, which might be slightly different (depending on the velocity) to the pre-deptermined landingPosition
+    private List<float> actualDropPosition = new List<float> { 3, -3, -3, -3, 3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, 3, -3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, 3, -3, 3, 3, -3, -3, 3, -3, -3, -3, 3, 3, 3, -3, -3, -3, 3, 3, 3, 3, -3, 3, -3, 3, 3, -3, -3, -3, 3, -3, 3, -3, 3 };
 
     // parameter tracking
     private int trialNr; // current trial number
 
     // reference to timer class
     public Timer timer;
-
-    // actualLandingPosition, which might be slightly different (depending on the velocity) to the pre-deptermined landingPosition
-    private List<float> actualDropPosition = new List<float> { 3, -3, -3, -3, 3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, 3, -3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, -3, 3, -3, -3, 3, 3, -3, -3, 3, 3, 3, 3, 3, -3, 3, 3, -3, -3, 3, -3, -3, -3, 3, 3, 3, -3, -3, -3, 3, 3, 3, 3, -3, 3, -3, 3, 3, -3, -3, -3, 3, -3, 3, -3, 3 };
-
 
     // task state machine
     public enum State
@@ -116,7 +112,7 @@ public class SceneController : MonoBehaviour
         GlobalParameters.AddVelocity = true; // ?
 
         // initialize trialNr to 1
-        trialNr =58;
+        trialNr = 58;
 
         // initialise state 
         state = State.Wait;
