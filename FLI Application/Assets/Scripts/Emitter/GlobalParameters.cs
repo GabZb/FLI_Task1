@@ -13,6 +13,7 @@
     private static string path;
 
 
+
     //  properties = extension of class variable and it provides a mechanism to
     // read, write or change the value of class variable without effecting the
     // external way of accessing it in our applications.
@@ -46,6 +47,10 @@
     {
         get { return keyControl; }
         set { keyControl = value; }
+    }
+
+    internal class SubjectID
+    {
     }
 }
 
