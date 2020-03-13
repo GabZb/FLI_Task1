@@ -10,13 +10,11 @@ public class Instructions : MonoBehaviour
 
 
     // specific instructions
-    public GameObject Instructions_2;
-    public GameObject Instructions_3;
-    public GameObject Instructions_4;
-    public GameObject Instructions_5;
-    public GameObject Instructions_13;
-    public GameObject Instructions_14;
-    public GameObject Instructions_15;
+    public GameObject ArrowsInstructions;
+    public GameObject BasketInstructions;
+    public GameObject EndEstimationInstructions;
+    public GameObject EndInstructions;
+
 
     public GameObject FallInstructions;
 
@@ -45,9 +43,6 @@ public class Instructions : MonoBehaviour
         Wait,
         Start,
         StaticFall,
-        Emitter2,
-        Emitter3,
-        Emitter4,
         Arrows,
         Basket,
         EndEstimation,
@@ -74,9 +69,6 @@ public class Instructions : MonoBehaviour
         _instructionBallRigidbody = instructionBall.GetComponent<Rigidbody>();
         _instructionBallMeshRend = instructionBall.GetComponent<MeshRenderer>();
 
-        // make instructional ball invisible
-        //        _instructionBallMeshRend.enabled = false;
-        //        _instructionBallRigidbody.useGravity = false;
 
         state = State.Wait;
 
@@ -99,22 +91,6 @@ public class Instructions : MonoBehaviour
                 break;
 
             case State.StaticFall:
-              if (Input.GetKeyDown(KeyCode.Return))
-                state = State.Emitter2;
-                break;
-
-
-            case State.Emitter2:
-              if (Input.GetKeyDown(KeyCode.Return))
-                state = State.Emitter3;
-                break;
-
-            case State.Emitter3:
-              if (Input.GetKeyDown(KeyCode.Return))
-                state = State.Emitter4;
-                break;
-
-            case State.Emitter4:
               if (Input.GetKeyDown(KeyCode.Return))
                 state = State.Arrows;
                 break;
@@ -144,18 +120,15 @@ public class Instructions : MonoBehaviour
             background.SetActive(false);
 
             // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(false);
 
-            Instructions_13.SetActive(false);
-            Instructions_14.SetActive(false);
-            Instructions_15.SetActive(false);
+            FallInstructions.SetActive(false);
 
             // make instructional ball invisible
             _instructionBallMeshRend.enabled = false;
-//            _instructionBallRigidbody.useGravity = false;
 
         }
 
@@ -172,14 +145,11 @@ public class Instructions : MonoBehaviour
             background.SetActive(false);
 
             // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(false);
 
-            Instructions_13.SetActive(false);
-            Instructions_14.SetActive(false);
-            Instructions_15.SetActive(false);
 
             FallInstructions.SetActive(true);
 
@@ -207,14 +177,10 @@ public class Instructions : MonoBehaviour
 
 
             // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
-
-            Instructions_13.SetActive(false);
-            Instructions_14.SetActive(false);
-            Instructions_15.SetActive(false);
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(false);
 
 
             FallInstructions.SetActive(false);
@@ -223,84 +189,27 @@ public class Instructions : MonoBehaviour
             _instructionBallRigidbody.useGravity = true;
 
 
-        //    emitter.transform.position = new Vector3(0, emitter.transform.position.y, emitter.transform.position.z);
-
-
-        }
-
-
-        if (state == State.Emitter2)
-        {
-
-
-            // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
-
-
-            Instructions_13.SetActive(true);
-            Instructions_14.SetActive(false);
-            Instructions_15.SetActive(false);
-
-            // make occluder appear 
-            occluder.SetActive(true);
-        }
-
-
-        if (state == State.Emitter3)
-        {
-
-            // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
-
-
-            Instructions_13.SetActive(false);
-            Instructions_14.SetActive(true);
-            Instructions_15.SetActive(false);
-
-            // make occluder disappear
-            occluder.SetActive(false);
-
-        }
-
-
-        if (state == State.Emitter4)
-        {
-
-            // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
-
-            Instructions_13.SetActive(false);
-            Instructions_14.SetActive(false);
-            Instructions_15.SetActive(true);
-
         }
 
 
         if (state == State.Arrows)
         {
 
+            Destroy(instructionBall);
+
 
             // show correct instructions
-            Instructions_2.SetActive(true);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
+            ArrowsInstructions.SetActive(true);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(false);
 
-            Instructions_13.SetActive(false);
-            Instructions_14.SetActive(false);
-            Instructions_15.SetActive(false);
 
-            // make occluder disappear
-            occluder.SetActive(false);
+            FallInstructions.SetActive(false);
+
+
+            // make occluder appears
+            occluder.SetActive(true);
 
             timer.time = 5;
 
@@ -309,12 +218,10 @@ public class Instructions : MonoBehaviour
         if (state == State.Basket)
         {
 
-            Instructions_2.SetActive(true);
-            Instructions_3.SetActive(true);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
-
-
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(true);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(false);
 
             basket.transform.position = new Vector3(basket.transform.position.x, basket.transform.position.y, basket.transform.position.z);
 
@@ -389,10 +296,10 @@ public class Instructions : MonoBehaviour
         {
 
             // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(true);
-            Instructions_5.SetActive(false);
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(true);
+            EndInstructions.SetActive(false);
 
 
         }
@@ -402,14 +309,14 @@ public class Instructions : MonoBehaviour
 
 
             // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(true);
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(true);
 
+            _ballMeshRend.enabled = false;
 
-
-            if (Input.GetKeyDown(KeyCode.X))
+            if (Input.GetKeyDown(KeyCode.Y))
             {
                 state = State.Stop;
             }
@@ -420,12 +327,12 @@ public class Instructions : MonoBehaviour
         {
 
             // show correct instructions
-            Instructions_2.SetActive(false);
-            Instructions_3.SetActive(false);
-            Instructions_4.SetActive(false);
-            Instructions_5.SetActive(false);
+            ArrowsInstructions.SetActive(false);
+            BasketInstructions.SetActive(false);
+            EndEstimationInstructions.SetActive(false);
+            EndInstructions.SetActive(false);
 
-            _ballMeshRend.enabled = false;
+            _ballMeshRend.enabled = true;
 
 
         }

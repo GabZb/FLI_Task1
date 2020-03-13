@@ -10,7 +10,8 @@
 
     private static bool keyControl;
 
-    private static string path;
+    private static string path1;
+    private static string path2;
 
 
 
@@ -18,10 +19,16 @@
     // read, write or change the value of class variable without effecting the
     // external way of accessing it in our applications.
 
-    public static string Path
+    public static string Path1
     {
-        get { return path; }
-        set { path = value; }
+        get { return path1; }
+        set { path1 = value; }
+    }
+
+    public static string Path2
+    {
+        get { return path2; }
+        set { path2 = value; }
     }
 
 

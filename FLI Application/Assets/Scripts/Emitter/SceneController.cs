@@ -12,6 +12,11 @@ using System.IO;
 public class SceneController : MonoBehaviour
 {
 
+    // experiment parameters
+    int subjectID = 05;
+    private int nrTrials = 60; // total number of trials (6 first are training)
+    private float estimationMaxDuration = 10f;
+
     // objects set in inspector
     public GameObject emitter;
     private Rigidbody _emitterRigidbody;
@@ -27,18 +32,13 @@ public class SceneController : MonoBehaviour
     public GameObject occluder;
     public GameObject background;
 
-    // experiment parameters
-    int subjectID = 01;
-    private int nrTrials = 60; // total number of trials
-    private float estimationMaxDuration = 10f;
-
     // parameter tracking
     private int trialNr; // current trial number
     private int side;
 
     // Lists to define heights, velocities, positions 
     private List<float> emitterStartPosition = new List<float> { 10, 10, -10, 10, -10, -10, 10, 10, -10, -10, 10, 10, 10, 10, 10, 10, 10, -10, -10, -10, -10, -10, 10, 10, -10, 10, -10, -10, -10, -10, -10, 10, -10, -10, -10, -10, -10, -10, 10, -10, -10, 10, -10, 10, 10, 10, 10, 10, 10, 10, -10, -10, 10, -10, 10, -10, 10, 10, 10, 10 }; // influences time it takes for emitter to appear (with velocity)
-    private List<float> emitterVelocity = new List<float> { -3.5f, -3.5f, 3.5f, -1.5f, 3.5f, 3.5f, -1.5f, -3.5f, 2.5f, 3.5f, -3.5f, -1.5f, -1.5f, -3.5f, -3.5f, -3.5f, -2.5f, 3.5f, 3.5f, 2.5f, 1.5f, 1.5f, -2.5f, -1.5f, 2.5f, -1.5f, 2.5f, 3.5f, 1.5f, 1.5f, 2.5f, -2.5f, 3.5f, 3.5f, 2.5f, 3.5f, 1.5f, 3.5f, -3.5f, 2.5f, 1.5f, -3.5f, 2.5f, -2.5f, -1.5f, -1.5f, -3.5f, -2.5f, -1.5f, -3.5f, 3.5f, 2.5f, -2.5f, 1.5f, -2.5f, 1.5f, -2.5f, -1.5f, -1.5f, -2.5f };
+    private List<float> emitterVelocity = new List<float> { -3.5f, -2.5f, 3.5f, -1.5f, 3.5f, 3.5f, -1.5f, -3.5f, 2.5f, 3.5f, -3.5f, -1.5f, -1.5f, -3.5f, -3.5f, -3.5f, -2.5f, 3.5f, 3.5f, 2.5f, 1.5f, 1.5f, -2.5f, -1.5f, 2.5f, -1.5f, 2.5f, 3.5f, 1.5f, 1.5f, 2.5f, -2.5f, 3.5f, 3.5f, 2.5f, 3.5f, 1.5f, 3.5f, -3.5f, 2.5f, 1.5f, -3.5f, 2.5f, -2.5f, -1.5f, -1.5f, -3.5f, -2.5f, -1.5f, -3.5f, 3.5f, 2.5f, -2.5f, 1.5f, -2.5f, 1.5f, -2.5f, -1.5f, -1.5f, -2.5f };
     private List<float> emitterHeight = new List<float> { 1.5f, 1.5f, 3f, 1.5f, 4.5f, 1.5f, 1.5f, 4.5f, 4.5f, 4.5f, 1.5f, 3f, 3f, 3f, 1.5f, 3f, 4.5f, 4.5f, 3f, 3f, 1.5f, 1.5f, 1.5f, 3f, 1.5f, 1.5f, 1.5f, 4.5f, 4.5f, 4.5f, 1.5f, 4.5f, 3f, 1.5f, 3f, 1.5f, 3f, 3f, 3f, 4.5f, 1.5f, 4.5f, 3f, 4.5f, 1.5f, 4.5f, 4.5f, 3f, 4.5f, 1.5f, 1.5f, 4.5f, 3f, 3f, 1.5f, 3f, 3f, 4.5f, 4.5f, 1.5f };
     private List<float> emitterDropPosition = new List<float> { 2, -2, -2, -0, 0, -2, - 2, 2, -2, 2, 2, 2, -0, -2, -0, 2, -0, 0, 2, 0, -2, 2, -0, -2, 0, 2, -2, -2, -2, 0, 2, -2, -2, 2, 2, 0, 2, 0, -0, 2, 0, -0, -2, 2, -0, -0, -2, -0, 2, -2, -2, 0, 2, -2, -2, 0, -2, -2, -2, 2 };
     //private List<float> basketStartPosition = new List<float> { -3.3f, -3.3f, 3.3f, -3.3f, 3.3f, 3.3f, -3.3f, -3.3f, 3.3f, 3.3f, -3.3f, -3.3f, -3.3f, -3.3f, -3.3f, -3.3f, -3.3f, 3.3f, 3.3f, 3.3f, 3.3f, 3.3f, -3.3f, -3.3f, 3.3f, -3.3f, 3.3f, 3.3f, 3.3f, 3.3f, 3.3f, -3.3f, 3.3f, 3.3f, 3.3f, 3.3f, 3.3f, 3.3f, -3.3f, 3.3f, 3.3f, -3.3f, 3.3f, -3.3f, -3.3f, -3.3f, -3.3f, -3.3f, -3.3f, -3.3f, 3.3f, 3.3f, -3.3f, 3.3f, -3.3f, 3.3f, -3.3f, -3.3f, -3.3f, -3.3f };
@@ -51,7 +51,8 @@ public class SceneController : MonoBehaviour
 
 
     // make local variables accessible in various methods
-    double Difference { get; set; }
+    double DifferenceLandingPosition { get; set; }
+    double DifferenceDropPosition { get; set; }
     double LandingPosition { get; set; }
     double ResponseTime { get; set; }
 
@@ -63,7 +64,6 @@ public class SceneController : MonoBehaviour
     {
         Wait,
         Setup,
-//        GetReady,
         TransitionToTask,
         Task,
         TransitionToEstimation,
@@ -93,17 +93,14 @@ public class SceneController : MonoBehaviour
     private void Start()
     {
         // set the path
-        GlobalParameters.Path = Application.dataPath + "/Data/" + subjectID + "_task.txt";
+        GlobalParameters.Path2 = Application.dataPath + "/Data/" + subjectID + "_task.txt";
 
         // create .txt file with date and time
-        File.WriteAllText(GlobalParameters.Path, "\n\n\n" + "Date and time: " + DateTime.Now.ToString("yyyyMMdd - HHmmss") + "\n\n" + "trial side height velocity dropPosition trueLandingPosition estimatedLandinPosition difference responseTime");
+        File.WriteAllText(GlobalParameters.Path2, "\n\n\n" + "Date and time: " + DateTime.Now.ToString("yyyyMMdd - HHmmss") + "\n\n" + "trial side height velocity dropPosition trueLandingPosition estimatedLandinPosition DifferenceLandingPosition responseTime DifferenceDropPosition");
 
-        // get reference to scripts
-        // dropController = GetComponent<DropController>();
 
-        // get emitter rigidbody & mesh renderer
+        // get emitter rigidbody
         _emitterRigidbody = emitter.GetComponent<Rigidbody>();
-//        _emitterMeshRend = emitter.GetComponent<MeshRenderer>();
 
         // get basket rigidbody 
         _basketRigidbody = basket.GetComponent<Rigidbody>();
@@ -149,9 +146,6 @@ public class SceneController : MonoBehaviour
             // hide end training instruction
             endTrainingInstruction.SetActive(false);
 
-            // make ball invisible
-            _ballMeshRend.enabled = false;
-
 
             if (Input.GetKeyDown(KeyCode.Y)) 
             {
@@ -164,12 +158,6 @@ public class SceneController : MonoBehaviour
 
         if (state == State.Setup)
         {
-
-           //make emitter visible
-//            _emitterMeshRend.enabled = true;
-
-            // make ball visible
-            _ballMeshRend.enabled = true;
 
             // show start instruction
             startInstruction.SetActive(true);
@@ -207,21 +195,10 @@ public class SceneController : MonoBehaviour
                 side = 0; // left
             }
 
-            //           state = State.GetReady;
 
             state = State.TransitionToTask;
         }
 
-
-//        if (state == State.GetReady)
-//        {
-            // if enter key is pressed transition to next state
-//            if (Input.GetKeyDown(KeyCode.Return))
-//            {
-//                state = State.TransitionToTask;
-//            }
-
-//        }
 
 
         if (state == State.TransitionToTask)
@@ -259,7 +236,7 @@ public class SceneController : MonoBehaviour
                   }
             }
 
-            else if (side == 0) //if (emitterVelocity[trialNr - 1] < 0)
+            else if (side == 0)
             {
 
                   if (emitter.transform.position.x > emitterDropPosition[trialNr - 1]) // == <
@@ -281,12 +258,6 @@ public class SceneController : MonoBehaviour
             // hide break instruction
             breakInstruction.SetActive(false);
 
-            // make emitter disappear
-//            _emitterMeshRend.enabled = false;
-
-            //make ball disappear
-//            _ballMeshRend.enabled = false;
-
             // occlude entire screen
             occluder.SetActive(true);
 
@@ -301,7 +272,6 @@ public class SceneController : MonoBehaviour
         if (state == State.Estimation)
         {
 
-
             // show estimation instruction
             estimationInstruction.SetActive(true);
 
@@ -313,7 +283,7 @@ public class SceneController : MonoBehaviour
 
             {
 
-                basketPosition.x += 0.1f;
+                basketPosition.x += 0.5f;
                 basket.transform.position = basketPosition;
 
             }
@@ -322,7 +292,7 @@ public class SceneController : MonoBehaviour
 
             {
 
-                basketPosition.x -= 0.1f;
+                basketPosition.x -= 0.5f;
                 basket.transform.position = basketPosition;
 
             }
@@ -453,9 +423,11 @@ public class SceneController : MonoBehaviour
 
         LandingPosition = landingPosition;
 
-        double difference = basket.transform.position.x - landingPosition;
+        double difference = basket.transform.position.x - landingPosition; // estimated - true -> if pos: estimated towards right, if neg: towards left
+        DifferenceLandingPosition = difference;
 
-        Difference = difference;
+        double differenceDrop = basket.transform.position.x - actualDropPosition[trialNr - 1]; // estimated - dropPos -> if almost 0 = straight-down belief
+        DifferenceDropPosition = differenceDrop;
 
     }
 
@@ -466,9 +438,9 @@ public class SceneController : MonoBehaviour
         //    string content = "trial : " + trialNr + "\n" + "emitter start location : " + side + "\n" + "correct location : " + LandingPosition + "\n" + "estimated location : "
         //        + basket.transform.position.x + "\n" + "difference : " + Difference + "\n" + "response time : " + ResponseTime + "\n\n";
 
-        string content = "\n\n" + trialNr + " " + side + " " + (emitterHeight[trialNr - 1] + 3.6f - 0.5f) + " " + emitterVelocity[trialNr - 1] + " " + actualDropPosition[trialNr - 1] + " " + LandingPosition + " " + basket.transform.position.x + " " + Difference + " " + ResponseTime;
+        string content = "\n" + trialNr + " " + side + " " + (emitterHeight[trialNr - 1] + 3.6f - 0.5f) + " " + emitterVelocity[trialNr - 1] + " " + actualDropPosition[trialNr - 1] + " " + LandingPosition + " " + basket.transform.position.x + " " + DifferenceLandingPosition + " " + ResponseTime + " " + DifferenceDropPosition;
         // Add content to existing file
-        File.AppendAllText(GlobalParameters.Path, content); //writealltext will replace text
+        File.AppendAllText(GlobalParameters.Path2, content); //writealltext will replace text
 
     }
 

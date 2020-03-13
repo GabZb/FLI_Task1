@@ -11,6 +11,12 @@ using System.IO;
 
 public class Control : MonoBehaviour
 {
+
+    // control experiment parameters
+    int subjectID = 05;
+    private int nrTrials = 6; // total number of trials
+
+
     // reference to timer class
     public Timer timer;
 
@@ -29,10 +35,6 @@ public class Control : MonoBehaviour
 
     public GameObject background;
 
-    // control experiment parameters
-    int subjectID = 01;
-    private int nrTrials = 6; // total number of trials
-
     // parameter tracking
     private int trialNr;
     private int side;
@@ -44,7 +46,7 @@ public class Control : MonoBehaviour
 
     // Lists to define heights, velocities, positions 
     private List<float> emitterStartPosition = new List<float>  {10, -10, 10, -10, 10, -10};
-    private List<float> emitterVelocity = new List<float> {-1.5f, 3.5f, -3.5f, 3.5f, -3.5f, 3.5f};
+    private List<float> emitterVelocity = new List<float> {-1.5f, 3.5f, -2.5f, 3.5f, -3.5f, 3.5f};
     private List<float> emitterHeight = new List<float> {1.5f, 3f, 1.5f, 1.5f, 1.5f, 4.5f};
     private List<float> emitterDropPosition = new List<float> {-0, -2, 2, -2, -2, 0 };
     private List<float> emitterRealExitPosition = new List<float> { -8, 8, -8, 8, -8, 8 };
@@ -81,10 +83,10 @@ public class Control : MonoBehaviour
         timer = GetComponent<Timer>();
 
         // set the path
-        GlobalParameters.Path = Application.dataPath + "/Data/" + subjectID + "_control.txt";
+        GlobalParameters.Path1 = Application.dataPath + "/Data/" + subjectID + "_control.txt";
 
         // create .txt file with date and time
-        File.WriteAllText(GlobalParameters.Path, "\n\n\n" + "Date and time: " + DateTime.Now.ToString("yyyyMMdd - HHmmss") + "\n\n" + "realExitPosition estimatedExitPosition difference");
+        File.WriteAllText(GlobalParameters.Path1, "\n\n\n" + "Date and time: " + DateTime.Now.ToString("yyyyMMdd - HHmmss") + "\n\n" + "trialNr Velocity realExitPosition estimatedExitPosition difference");
 
         // get ball, emitter and basket components
         _emitterRigidbody = emitter.GetComponent<Rigidbody>();
@@ -488,9 +490,6 @@ public class Control : MonoBehaviour
         if (state == State.Stop)
         {
 
-            // hide background
-            background.SetActive(false);
-
             // hide end control instructions
             endControlInstruction.SetActive(false);
 
@@ -501,10 +500,10 @@ public class Control : MonoBehaviour
         {
 
 
-            string content = "\n\n" + trialNr + " " + emitterRealExitPosition[trialNr - 1] + " " + EstimatedExitPosition + " " + Difference;
+            string content = "\n" + trialNr + " " + emitterVelocity[trialNr - 1] + " " + emitterRealExitPosition[trialNr - 1] + " " + EstimatedExitPosition + " " + Difference;
 
             // Add content to existing file
-            File.AppendAllText(GlobalParameters.Path, content); //writealltext will replace text
+            File.AppendAllText(GlobalParameters.Path1, content); //writealltext will replace text
 
         }
 
